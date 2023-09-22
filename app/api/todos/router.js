@@ -1,11 +1,11 @@
 var express = require('express');
 var router = express.Router();
 
+const { getAll, create, getById } = require('./controller')
 
-router.get('/todos', function(req, res, next) {
-  res.json({
-    message : "Welcome Todos Page"
-  })
-});
+
+router.get('/todos', getAll);
+router.post('/todos', create);
+router.get('/todos/:id', getById);
 
 module.exports = router;
