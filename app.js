@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 
 const todosRouter = require('./app/api/todos/router');
+const itemsRouter = require('./app/api/items/router');
 const URL = '/api/v1'
 const app = express();
 
@@ -23,10 +24,13 @@ app.get('/', function (req, res) {
 })
 
 app.use(`${URL}`, todosRouter);
+app.use(`${URL}`, itemsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  next(createError(404));
+  const err = new Error('Not Found')
+  err.status = 404;
+  next(err);
 });
 
 // error handler

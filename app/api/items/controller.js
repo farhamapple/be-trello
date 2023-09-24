@@ -1,51 +1,10 @@
 const { Todo, Item } = require('../../db/models');
 
 module.exports = {
-    getAll : async(req, res, next) =>{
-        try{
-            // call Spesific Column
-            // const result = await Todo.findAll({
-            //     attributes : ['id', 'name']
-            // });
-
-            // Get With Relation
-            const result = await Todo.findAll({
-                attributes : ['id', 'name'],
-                include :{
-                    model: Item,
-                    attributes : ['id', 'name'],
-                }
-            });
-
-            res.status(200).json({
-                message : 'success',
-                data : result
-            })
-        }catch(err){
-            // console.log(err)
-            next(err)
-        }
-    },
-    create : async(req, res, next) =>{
-        try{
-            const { name } = req.body;
-            const result = await Todo.create({
-                name
-            })
-
-            res.status(200).json({
-                message : 'success',
-                data : result
-            })
-        }catch(err){
-            // console.log(err)
-            next(err)
-        }
-    },
     getById : async(req, res, next) =>{
         try{
             const { id } = req.params;
-            const result = await Todo.findOne({
+            const result = await Item.findOne({
                 where: {id: id}
             })
 
@@ -59,19 +18,38 @@ module.exports = {
         }
     },
 
+    create : async(req, res, next) =>{
+        try{
+            const { name, TodoId } = req.body;
+            const result = await Item.create({
+                name, TodoId
+            })
+
+            res.status(200).json({
+                message : 'success',
+                data : result
+            })
+        }catch(err){
+            // console.log(err)
+            next(err)
+        }
+    },
+    
+
     update : async(req, res, next) =>{
        const { id } = req.params;
-       const { name } = req.body;
+       const { name, TodoId } = req.body;
        
-       Todo.findOne({
+       Item.findOne({
             where: {id: id}
-       }).then((todo) => {
-                todo.update({
-                    name : name
+       }).then((item) => {
+        item.update({
+                    name : name,
+                    TodoId : TodoId
                 }).then(() => {
                     res.status(200).json({
                         message : 'success',
-                        data : todo
+                        data : item
                     })
                 })
        }).catch((err) => {
@@ -94,17 +72,47 @@ module.exports = {
         //  console.log(err)
         // })
 
-        Todo.findOne({
+        Item.findOne({
             where: {id: id}
-       }).then((todo) => {
-                todo.destroy().then(() => {
+        }).then((item) => {
+                item.destroy().then(() => {
                     res.status(200).json({
                         message : 'success',
-                        data : todo
+                        data : item
                     })
                 })
-       }).catch((err) => {
-        next(err)
-       })
-     },
+        }).catch((err) => {
+            next(err)
+        })
+    },
+
+    move: async(req, res) => {
+        try{
+            const { id } = req.params;
+            const{ targetTodoId } = req.body;
+
+            const result = await Item.findOne({
+                                    where: {id : id}
+                                })
+            result.TodoId = targetTodoId;
+
+            await result.save();
+
+            res.status(200).json({
+                message: 'success',
+                data : result
+            })
+
+            // Item.findOne({
+            //     where: {id : id}
+            // }).then((item) => {
+
+            // }).catch((err) => {
+
+            // })
+        }catch(err){
+            next(err)
+        }
+    }
+
 }

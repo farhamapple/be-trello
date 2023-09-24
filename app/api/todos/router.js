@@ -9,4 +9,5 @@ router.post('/todos', validateCreate, create);
 router.get('/todos/:id', validateOne, getById);
 router.put('/todos/:id', validateCreateUpdate, update);
 router.delete('/todos/:id', validateOne, destroy);
+
 module.exports = router;
