@@ -1,5 +1,5 @@
 const { body, param, validationResult } = require('express-validator');
-const { Todo } = require('../../db/models');
+const { Todo, Item } = require('../../db/models');
 module.exports = {
 
     validateCreate: [
@@ -25,7 +25,7 @@ module.exports = {
         .withMessage('id must be an integer')
         .bail()
         .custom(async(value, {req}) => {
-            const checking = await Todo.findOne({
+            const checking = await Item.findOne({
                 where: {id : value}
             })
 
@@ -54,7 +54,7 @@ module.exports = {
         .withMessage('id must be an integer')
         .bail()
         .custom(async(value, {req}) => {
-            const checking = await Todo.findOne({
+            const checking = await Item.findOne({
                 where: {id : value}
             })
 
@@ -85,7 +85,7 @@ module.exports = {
         .withMessage('id must be an integer')
         .bail()
         .custom(async(value, {req}) => {
-            const checking = await Todo.findOne({
+            const checking = await Item.findOne({
                 where: {id : value}
             })
 
@@ -94,7 +94,21 @@ module.exports = {
             }
         })
         .withMessage('Item id Not Found'),
-        body('targetTodoId').notEmpty().withMessage('TargetTodoId is required'),
+         body('targetTodoId').notEmpty().withMessage('TargetTodoId is required')
+        .bail()
+        .isNumeric()
+        .withMessage('id must be an integer')
+        .bail()
+        .custom(async(value, {req}) => {
+            const checking = await Todo.findOne({
+                where: {id : value}
+            })
+
+            if(checking === null){
+                return Promise.reject();
+            }
+        })
+        .withMessage('Todo id Not Found'),
         (req, res, next) =>  {
             const errors = validationResult(req);
             if(!errors.isEmpty()){
