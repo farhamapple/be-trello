@@ -1,4 +1,5 @@
 const { Todo, Item } = require('../../db/models');
+var response = require('../../utils/response');
 
 module.exports = {
     getAll : async(req, res, next) =>{
@@ -17,10 +18,12 @@ module.exports = {
                 }
             });
 
-            res.status(200).json({
-                message : 'success',
-                data : result
-            })
+            // res.status(200).json({
+            //     message : 'success',
+            //     data : result
+            // })
+
+            response.ok(result, 'Get Data All Todos', '00', 200, false, res)
         }catch(err){
             // console.log(err)
             next(err)
@@ -33,10 +36,11 @@ module.exports = {
                 name
             })
 
-            res.status(200).json({
-                message : 'success',
-                data : result
-            })
+            // res.status(200).json({
+            //     message : 'success',
+            //     data : result
+            // })
+            response.ok(result, 'Insert Data to Todos Table', '00', 200, false, res)
         }catch(err){
             // console.log(err)
             next(err)
@@ -49,10 +53,12 @@ module.exports = {
                 where: {id: id}
             })
 
-            res.status(200).json({
-                message : 'success',
-                data : result
-            })
+            // res.status(200).json({
+            //     message : 'success',
+            //     data : result
+            // })
+
+            response.ok(result, 'Get Single Data from Todos', '00', 200, false, res)
         }catch(err){
             // console.log(err)
             next(err)
@@ -69,10 +75,12 @@ module.exports = {
                 todo.update({
                     name : name
                 }).then(() => {
-                    res.status(200).json({
-                        message : 'success',
-                        data : todo
-                    })
+                    // res.status(200).json({
+                    //     message : 'success',
+                    //     data : todo
+                    // })
+
+                    response.ok(todo, 'Update Data from Todos', '00', 200, false, res)
                 })
        }).catch((err) => {
         // console.log(err)
@@ -98,10 +106,12 @@ module.exports = {
             where: {id: id}
        }).then((todo) => {
                 todo.destroy().then(() => {
-                    res.status(200).json({
-                        message : 'success',
-                        data : todo
-                    })
+                    // res.status(200).json({
+                    //     message : 'success',
+                    //     data : todo
+                    // })
+
+                    response.ok(todo, 'Delete Data from Todos', '00', 200, false, res)
                 })
        }).catch((err) => {
         next(err)

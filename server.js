@@ -5,7 +5,7 @@ var debug = require('debug') ('nodejs-starter:server')
 var http = require('http')
 
 const { normalize } = require('path')
-let config = require('./config')
+let config = require('./app/config')
 
 var port = normalizePort(config.app.port );
 app.set('port', port)
