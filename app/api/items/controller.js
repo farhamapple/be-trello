@@ -9,6 +9,8 @@ module.exports = {
                 where: {id: id}
             })
 
+            
+
             // res.status(200).json({
             //     message : 'success',
             //     data : result
